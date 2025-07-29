@@ -29,7 +29,7 @@ func NewBot(token string, wc *omgo.Client) (*Bot, error) {
 	dispatcher := ext.NewDispatcher(&ext.DispatcherOpts{
 		MaxRoutines: ext.DefaultMaxRoutines,
 		Error: func(b *gotgbot.Bot, ctx *ext.Context, err error) ext.DispatcherAction {
-			log.Println("an error occurred while handling update:", err.Error())
+			log.Println("An error occurred while handling update:", err.Error())
 			return ext.DispatcherActionNoop
 		},
 	})
