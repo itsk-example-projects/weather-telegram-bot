@@ -27,3 +27,14 @@ func (b *Bot) help(bot *gotgbot.Bot, ctx *ext.Context) error {
 	}
 	return nil
 }
+
+func (b *Bot) configure(bot *gotgbot.Bot, ctx *ext.Context) error {
+	if _, err := ctx.EffectiveMessage.Reply(bot, ConfigureMessage, &gotgbot.SendMessageOpts{
+		ReplyMarkup: configureMenuInlineButton(),
+	}); err != nil {
+		return fmt.Errorf("failed to send \"%s\" message: %w", utils.GetFunctionName(1), err)
+	} else {
+		log.Printf("Sent help message to %s", GetUserName(ctx.EffectiveMessage.From))
+	}
+	return nil
+}

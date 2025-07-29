@@ -61,6 +61,45 @@ func (b *Bot) currentWeatherCallback(bot *gotgbot.Bot, ctx *ext.Context) error {
 	cw := forecast.CurrentWeather
 	response := fmt.Sprintf("%s\n\n%s, температура – %1.fºC, ветер %s, %1.f м/с", location, weather.GetCurrentWeatherByCode(cw.WeatherCode), cw.Temperature, weather.GetWindDirection(cw.WindDirection), cw.WindSpeed)
 	log.Printf("Sent result for \"%s\" (%s) to %s", ctx.EffectiveMessage.Text, strings.TrimSpace(response), GetUserName(ctx.EffectiveMessage.From))
-	_, err = ctx.EffectiveMessage.Reply(bot, response, &gotgbot.SendMessageOpts{ReplyMarkup: getCurrentWeatherBottomKeyboard()})
+	_, err = ctx.EffectiveMessage.Reply(bot, response, &gotgbot.SendMessageOpts{ReplyMarkup: currentWeatherBottomKeyboard()})
+	var show bool
+	show_, ok := b.State.getUserData(ctx, "show_location")
+	if ok {
+		show, ok = show_.(bool)
+		if ok && show {
+			_, _ = bot.SendLocation(ctx.EffectiveMessage.Chat.Id, lat, long, &gotgbot.SendLocationOpts{})
+		}
+	}
 	return nil
+}
+
+func (b *Bot) configureShowLocationCallback(bot *gotgbot.Bot, ctx *ext.Context) error {
+	var result string
+	var show bool
+	show_, ok := b.State.getUserData(ctx, "show_location")
+	if ok {
+		show, ok = show_.(bool)
+		if !ok {
+			b.State.setUserData(ctx, "show_location", true)
+			result = "Локация теперь будет отображаться в прогнозе погоды"
+			log.Printf("Error converting show_location from interface{} to bool")
+			return fmt.Errorf("error converting show_location from interface{} to bool")
+		}
+		b.State.setUserData(ctx, "show_location", !show)
+		if show {
+			result = "Локация больше не будет отображаться в прогнозе погоды"
+		} else {
+			result = "Локация теперь будет отображаться в прогнозе погоды"
+		}
+	} else {
+		b.State.setUserData(ctx, "show_location", true)
+		result = "Локация теперь будет отображаться в прогнозе погоды"
+	}
+	_, err := ctx.Update.CallbackQuery.Answer(bot, &gotgbot.AnswerCallbackQueryOpts{Text: result, ShowAlert: true})
+	return err
+}
+
+func (b *Bot) configureCloseMenuCallback(bot *gotgbot.Bot, ctx *ext.Context) error {
+	_, err := ctx.Update.CallbackQuery.Message.Delete(bot, nil)
+	return err
 }

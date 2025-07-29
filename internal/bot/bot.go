@@ -42,9 +42,12 @@ func NewBot(token string, wc *omgo.Client) (*Bot, error) {
 func (b *Bot) RegisterHandlers() {
 	b.Dispatcher.AddHandler(handlers.NewCommand("start", b.start))
 	b.Dispatcher.AddHandler(handlers.NewCommand("help", b.help))
+	b.Dispatcher.AddHandler(handlers.NewCommand("configure", b.configure))
 	b.Dispatcher.AddHandler(handlers.NewMessage(message.Text, b.forecastHandler))
 	b.Dispatcher.AddHandler(handlers.NewMessage(message.Location, b.forecastHandler))
 	b.Dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("current_weather"), b.currentWeatherCallback))
+	b.Dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("show_location"), b.configureShowLocationCallback))
+	b.Dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("close_menu"), b.configureCloseMenuCallback))
 }
 
 func (b *Bot) Start() {

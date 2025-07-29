@@ -64,7 +64,15 @@ func (b *Bot) forecastHandler(bot *gotgbot.Bot, ctx *ext.Context) error {
 		cw := forecast.CurrentWeather
 		response := fmt.Sprintf("%s\n\n%s, температура – %1.fºC, ветер %s, %1.f м/с", city, weather.GetCurrentWeatherByCode(cw.WeatherCode), cw.Temperature, weather.GetWindDirection(cw.WindDirection), cw.WindSpeed)
 		log.Printf("Sent result for \"%s\" (%s) to %s", city, strings.TrimSpace(response), GetUserName(ctx.EffectiveMessage.From))
-		_, err = ctx.EffectiveMessage.Reply(bot, response, &gotgbot.SendMessageOpts{ReplyMarkup: getCurrentWeatherBottomKeyboard()})
+		_, err = ctx.EffectiveMessage.Reply(bot, response, &gotgbot.SendMessageOpts{ReplyMarkup: currentWeatherBottomKeyboard()})
+		var show bool
+		show_, ok := b.State.getUserData(ctx, "show_location")
+		if ok {
+			show, ok = show_.(bool)
+			if ok && show {
+				_, _ = bot.SendLocation(ctx.EffectiveMessage.Chat.Id, lat, long, &gotgbot.SendLocationOpts{})
+			}
+		}
 	} else {
 		result, err := weather.GeocodeCity(ctx.EffectiveMessage.Text, 1)
 		if err != nil {
@@ -109,7 +117,15 @@ func (b *Bot) forecastHandler(bot *gotgbot.Bot, ctx *ext.Context) error {
 			cw := forecast.CurrentWeather
 			response := fmt.Sprintf("%s, температура – %1.fºC, ветер %s, %1.f м/с", weather.GetCurrentWeatherByCode(cw.WeatherCode), cw.Temperature, weather.GetWindDirection(cw.WindDirection), cw.WindSpeed)
 			log.Printf("Sent result for \"%s\" (%s) to %s", ctx.EffectiveMessage.Text, strings.TrimSpace(response), GetUserName(ctx.EffectiveMessage.From))
-			_, err = ctx.EffectiveMessage.Reply(bot, response, &gotgbot.SendMessageOpts{ReplyMarkup: getCurrentWeatherBottomKeyboard()})
+			_, err = ctx.EffectiveMessage.Reply(bot, response, &gotgbot.SendMessageOpts{ReplyMarkup: currentWeatherBottomKeyboard()})
+			var show bool
+			show_, ok := b.State.getUserData(ctx, "show_location")
+			if ok {
+				show, ok = show_.(bool)
+				if ok && show {
+					_, _ = bot.SendLocation(ctx.EffectiveMessage.Chat.Id, lat, long, &gotgbot.SendLocationOpts{})
+				}
+			}
 		default:
 			_, err = ctx.EffectiveMessage.Reply(bot, fmt.Sprintf("Найдено %d результатов для \"%s\", попробуйте уточнить вопрос", len(result), ctx.EffectiveMessage.Text), nil)
 			log.Printf("Found %d results for \"%s\", %s needs to specify", len(result), ctx.EffectiveMessage.Text, GetUserName(ctx.EffectiveMessage.From))

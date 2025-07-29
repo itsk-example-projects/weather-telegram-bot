@@ -2,19 +2,18 @@ package bot
 
 import "github.com/PaulSonOfLars/gotgbot/v2"
 
-func getCurrentWeatherInlineButton() gotgbot.InlineKeyboardMarkup {
+func configureMenuInlineButton() gotgbot.InlineKeyboardMarkup {
 	return gotgbot.InlineKeyboardMarkup{
-		InlineKeyboard: [][]gotgbot.InlineKeyboardButton{{
-			{Text: "Узнать погоду", CallbackData: "current_weather"},
-		}},
+		InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
+			{{Text: "Показывать локацию", CallbackData: "show_location"}},
+			{{Text: "Закрыть меню", CallbackData: "close_menu"}},
+		},
 	}
 }
 
-func getCurrentWeatherBottomKeyboard() gotgbot.ReplyKeyboardMarkup {
+func currentWeatherBottomKeyboard() gotgbot.ReplyKeyboardMarkup {
 	return gotgbot.ReplyKeyboardMarkup{
-		Keyboard: [][]gotgbot.KeyboardButton{{
-			{Text: "Узнать погоду"},
-		}},
+		Keyboard:       [][]gotgbot.KeyboardButton{{{Text: "Узнать погоду"}}},
 		ResizeKeyboard: true,
 	}
 }
