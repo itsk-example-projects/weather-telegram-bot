@@ -3,13 +3,14 @@ package bot
 import (
 	"context"
 	"fmt"
-	"github.com/hectormalot/omgo"
 	"log"
 	"strings"
-	"weather-telegram-bot/internal/weather"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
+	"github.com/hectormalot/omgo"
+
+	"weather-telegram-bot/internal/weather"
 )
 
 func (b *Bot) currentWeatherCallback(bot *gotgbot.Bot, ctx *ext.Context) error {
