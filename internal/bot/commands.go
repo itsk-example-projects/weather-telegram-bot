@@ -11,10 +11,8 @@ import (
 )
 
 func (b *Bot) start(bot *gotgbot.Bot, ctx *ext.Context) error {
-	if _, err := ctx.EffectiveMessage.Reply(bot, StartMessage, &gotgbot.SendMessageOpts{
-		ParseMode: "MarkdownV2",
-	}); err != nil {
-		return fmt.Errorf("failed to send %s message: %w", utils.GetFunctionName(1), err)
+	if _, err := ctx.EffectiveMessage.Reply(bot, StartMessage, nil); err != nil {
+		return fmt.Errorf("failed to send \"%s\" message: %w", utils.GetFunctionName(1), err)
 	} else {
 		log.Printf("Sent start message to %s", GetUserName(ctx.EffectiveMessage.From))
 	}
@@ -22,10 +20,8 @@ func (b *Bot) start(bot *gotgbot.Bot, ctx *ext.Context) error {
 }
 
 func (b *Bot) help(bot *gotgbot.Bot, ctx *ext.Context) error {
-	if _, err := ctx.EffectiveMessage.Reply(bot, HelpMessage, &gotgbot.SendMessageOpts{
-		ParseMode: "MarkdownV2",
-	}); err != nil {
-		return fmt.Errorf("failed to send %s message: %w", utils.GetFunctionName(1), err)
+	if _, err := ctx.EffectiveMessage.Reply(bot, "", nil); err != nil {
+		return fmt.Errorf("failed to send \"%s\" message: %w", utils.GetFunctionName(1), err)
 	} else {
 		log.Printf("Sent help message to %s", GetUserName(ctx.EffectiveMessage.From))
 	}
