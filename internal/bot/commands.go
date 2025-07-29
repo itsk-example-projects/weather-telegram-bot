@@ -10,7 +10,7 @@ import (
 	"weather-telegram-bot/internal/utils"
 )
 
-func start(bot *gotgbot.Bot, ctx *ext.Context) error {
+func (b *Bot) start(bot *gotgbot.Bot, ctx *ext.Context) error {
 	if _, err := ctx.EffectiveMessage.Reply(bot, StartMessage, &gotgbot.SendMessageOpts{
 		ParseMode: "MarkdownV2",
 	}); err != nil {
@@ -21,7 +21,7 @@ func start(bot *gotgbot.Bot, ctx *ext.Context) error {
 	return nil
 }
 
-func help(bot *gotgbot.Bot, ctx *ext.Context) error {
+func (b *Bot) help(bot *gotgbot.Bot, ctx *ext.Context) error {
 	if _, err := ctx.EffectiveMessage.Reply(bot, HelpMessage, &gotgbot.SendMessageOpts{
 		ParseMode: "MarkdownV2",
 	}); err != nil {

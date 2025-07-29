@@ -13,6 +13,7 @@ import (
 
 type Bot struct {
 	Bot        *gotgbot.Bot
+	State      *state
 	Dispatcher *ext.Dispatcher
 	Updater    *ext.Updater
 	Weather    *omgo.Client
@@ -24,6 +25,7 @@ func NewBot(token string, wc *omgo.Client) (*Bot, error) {
 		return nil, err
 	}
 
+	s := &state{}
 	dispatcher := ext.NewDispatcher(&ext.DispatcherOpts{
 		MaxRoutines: ext.DefaultMaxRoutines,
 		Error: func(b *gotgbot.Bot, ctx *ext.Context, err error) ext.DispatcherAction {
@@ -33,12 +35,12 @@ func NewBot(token string, wc *omgo.Client) (*Bot, error) {
 	})
 	updater := ext.NewUpdater(dispatcher, nil)
 
-	return &Bot{Bot: bot, Dispatcher: dispatcher, Updater: updater, Weather: wc}, nil
+	return &Bot{Bot: bot, State: s, Dispatcher: dispatcher, Updater: updater, Weather: wc}, nil
 }
 
 func (b *Bot) RegisterHandlers() {
-	b.Dispatcher.AddHandler(handlers.NewCommand("start", start))
-	b.Dispatcher.AddHandler(handlers.NewCommand("help", help))
+	b.Dispatcher.AddHandler(handlers.NewCommand("start", b.start))
+	b.Dispatcher.AddHandler(handlers.NewCommand("help", b.help))
 	b.Dispatcher.AddHandler(handlers.NewMessage(message.Text, b.forecastHandler))
 	b.Dispatcher.AddHandler(handlers.NewMessage(message.Location, b.forecastHandler))
 }
