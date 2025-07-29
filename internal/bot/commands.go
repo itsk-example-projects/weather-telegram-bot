@@ -20,7 +20,7 @@ func (b *Bot) start(bot *gotgbot.Bot, ctx *ext.Context) error {
 }
 
 func (b *Bot) help(bot *gotgbot.Bot, ctx *ext.Context) error {
-	if _, err := ctx.EffectiveMessage.Reply(bot, "", nil); err != nil {
+	if _, err := ctx.EffectiveMessage.Reply(bot, HelpMessage, nil); err != nil {
 		return fmt.Errorf("failed to send \"%s\" message: %w", utils.GetFunctionName(1), err)
 	} else {
 		log.Printf("Sent help message to %s", GetUserName(ctx.EffectiveMessage.From))

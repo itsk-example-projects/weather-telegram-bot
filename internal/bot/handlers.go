@@ -46,13 +46,13 @@ func (b *Bot) forecastHandler(bot *gotgbot.Bot, ctx *ext.Context) error {
 		if err != nil {
 			_, err = ctx.EffectiveMessage.Reply(bot, "Ошибка парсинга локации", nil)
 			log.Printf("Error creating location: %v", err)
-			return err
+			return fmt.Errorf("error creating location: %w", err)
 		}
 		forecast, err := b.Weather.Forecast(context.Background(), loc, nil)
 		if err != nil {
 			_, err = ctx.EffectiveMessage.Reply(bot, "Ошибка получения прогноза погоды", nil)
 			log.Printf("Error getting forecast: %v", err)
-			return err
+			return fmt.Errorf("error getting forecast: %w", err)
 		}
 		var city string
 		c, err := weather.ReverseGeocode(lat, long)
@@ -70,26 +70,26 @@ func (b *Bot) forecastHandler(bot *gotgbot.Bot, ctx *ext.Context) error {
 		if err != nil {
 			_, err = ctx.EffectiveMessage.Reply(bot, "Ошибка определения города из текста", nil)
 			log.Printf("Error determining city from text: %v", err)
-			return err
+			return fmt.Errorf("error determining city from text: %w", err)
 		}
 		switch len(result) {
 		case 0:
 			_, err = ctx.EffectiveMessage.Reply(bot, fmt.Sprintf("Нет результатов для \"%s\"", ctx.EffectiveMessage.Text), nil)
 			log.Printf("No results for \"%s\", %s needs to try again", ctx.EffectiveMessage.Text, GetUserName(ctx.EffectiveMessage.From))
-			return err
+			return fmt.Errorf("no results for \"%s\", %s needs to try again", ctx.EffectiveMessage.Text, GetUserName(ctx.EffectiveMessage.From))
 		case 1:
 			var lat, long float64
 			lat, err = strconv.ParseFloat(result[0].Lat, 64)
 			if err != nil {
 				_, err = ctx.EffectiveMessage.Reply(bot, "Ошибка преобразования полученного города в координаты", nil)
 				log.Printf("Error converting latitude from string to float64: %v", err)
-				return err
+				return fmt.Errorf("error converting latitude from string to float64: %w", err)
 			}
 			long, err = strconv.ParseFloat(result[0].Lon, 64)
 			if err != nil {
 				_, err = ctx.EffectiveMessage.Reply(bot, "Ошибка преобразования полученного города в координаты", nil)
 				log.Printf("Error converting longtitude from string to float64: %v", err)
-				return err
+				return fmt.Errorf("error converting longtitude from string to float64: %w", err)
 			}
 			_, exist := b.State.getUserData(ctx, "location_saved")
 			if !exist {
@@ -104,7 +104,7 @@ func (b *Bot) forecastHandler(bot *gotgbot.Bot, ctx *ext.Context) error {
 			if err != nil {
 				_, err = ctx.EffectiveMessage.Reply(bot, "Ошибка получения прогноза погоды", nil)
 				log.Printf("Error getting forecast: %v", err)
-				return err
+				return fmt.Errorf("error getting forecast: %w", err)
 			}
 			cw := forecast.CurrentWeather
 			response := fmt.Sprintf("%s, температура – %1.fºC, ветер %s, %1.f м/с", weather.GetCurrentWeatherByCode(cw.WeatherCode), cw.Temperature, weather.GetWindDirection(cw.WindDirection), cw.WindSpeed)
@@ -113,7 +113,7 @@ func (b *Bot) forecastHandler(bot *gotgbot.Bot, ctx *ext.Context) error {
 		default:
 			_, err = ctx.EffectiveMessage.Reply(bot, fmt.Sprintf("Найдено %d результатов для \"%s\", попробуйте уточнить вопрос", len(result), ctx.EffectiveMessage.Text), nil)
 			log.Printf("Found %d results for \"%s\", %s needs to specify", len(result), ctx.EffectiveMessage.Text, GetUserName(ctx.EffectiveMessage.From))
-			return err
+			return fmt.Errorf("found %d results for \"%s\", %s needs to specify", len(result), ctx.EffectiveMessage.Text, GetUserName(ctx.EffectiveMessage.From))
 		}
 	}
 	return nil
