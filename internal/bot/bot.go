@@ -7,6 +7,7 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
+	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers/filters/callbackquery"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers/filters/message"
 	"github.com/hectormalot/omgo"
 )
@@ -43,6 +44,7 @@ func (b *Bot) RegisterHandlers() {
 	b.Dispatcher.AddHandler(handlers.NewCommand("help", b.help))
 	b.Dispatcher.AddHandler(handlers.NewMessage(message.Text, b.forecastHandler))
 	b.Dispatcher.AddHandler(handlers.NewMessage(message.Location, b.forecastHandler))
+	b.Dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("current_weather"), b.currentWeatherCallback))
 }
 
 func (b *Bot) Start() {
