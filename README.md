@@ -16,7 +16,7 @@ Telegram Bot API – [PaulSonOfLars/gotgbot](https://github.com/PaulSonOfLars/go
 #### Шаги запуска
 1. Клонируйте репозиторий
 ```
-git clone https://github.com/KovshefulCoder/weather-telegram-bot.git
+git clone https://github.com/itsk-example-projects/weather-telegram-bot.git
 cd weather-telegram-bot
 ```
 2. Настройте переменные окружения<br>
@@ -34,3 +34,7 @@ go run cmd/main.go
 #### Команды<br>
 `/start` — Показать приветственное сообщение<br>
 `/help` — Показать справку по командам<br>
+`/configure` — Показать меню настроек<br>
+
+### Ссылка на бота
+[@another_one_example_weather_bot](https://t.me/another_one_example_weather_bot)
