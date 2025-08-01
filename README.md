@@ -1,40 +1,39 @@
 # Weather Telegram Bot
-Простой Telegram-бот, который предоставляет текущий прогноз погоды для указанного города
+A simple Telegram bot that provides the current weather forecast for a specified city
 
-### Возможности
-- Получение погоды по названию города<br>
-- Получение погоды по отправленной геолокации<br>
-- Автоматическое определение города по координатам (latitude, longitude)<br>
-### Технологии
-Telegram Bot API – [PaulSonOfLars/gotgbot](https://github.com/PaulSonOfLars/gotgbot)<br>
-Погодные данные – [HectorMalot/omgo](https://github.com/HectorMalot/omgo) для [Open-Meteo](https://open-meteo.com)<br>
-Геокодирование – [Nominatim](https://nominatim.org)<br>
-### Установка и запуск
-#### Требования
-- Установленный Go (версия 1.18 или выше)<br>
-- Токен для Telegram-бота (можно получить у [@BotFather](https://t.me/BotFather))<br>
-#### Шаги запуска
-1. Клонируйте репозиторий
-```
-git clone https://github.com/itsk-example-projects/weather-telegram-bot.git
-cd weather-telegram-bot
-```
-2. Настройте переменные окружения<br>
-Создайте файл `.env` в корне проекта или экспортируйте переменные окружения
-```
-export TELEGRAM_BOT_TOKEN="ВАШ_ТОКЕН_ЗДЕСЬ"
-```
-3. Запустите приложение:
-```
-go run cmd/main.go
-```
-
-### Использование
-Напишите название города (например, "Москва"), или отправьте локацию через меню вложений чтобы получить текущую погоду<br>
-#### Команды<br>
-`/start` — Показать приветственное сообщение<br>
-`/help` — Показать справку по командам<br>
-`/configure` — Показать меню настроек<br>
-
-### Ссылка на бота
 [@another_one_example_weather_bot](https://t.me/another_one_example_weather_bot)
+
+### Features
+- Get weather by city name
+- Get weather by sent geolocation
+- Automatic city detection by coordinates (latitude, longitude)
+### Used libraries
+- Telegram Bot API – [PaulSonOfLars/gotgbot](https://github.com/PaulSonOfLars/gotgbot)<br>
+- Weather data – [HectorMalot/omgo](https://github.com/HectorMalot/omgo) for [Open-Meteo](https://open-meteo.com)<br>
+- Geocoding – [Nominatim](https://nominatim.org)<br>
+### Installation and running
+#### Requirements
+- Go (version 1.18 or higher) installed
+- A Telegram bot token (obtainable from [@BotFather](https://t.me/BotFather))
+#### Setup steps
+1. Clone the repository
+    ```
+    git clone https://github.com/itsk-example-projects/weather-telegram-bot.git
+    cd weather-telegram-bot
+    ```
+2. Configure environment variables<br>
+   Create a .env file in the project root or export the environment variables
+    ```
+    export TELEGRAM_BOT_TOKEN="XXX"
+    ```
+3. Run the application:
+    ```
+    go run cmd/main.go
+    ```
+
+### Usage
+Send a city name (e.g., "Moscow"), or send your location via the attachment menu to get the current weather
+#### Commands
+`/start` — start bot/see welcome message<br>
+`/help` — show help<br>
+`/configure` — settings menu<br>
